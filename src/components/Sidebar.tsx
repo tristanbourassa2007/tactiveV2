@@ -10,7 +10,7 @@ export default function Sidebar() {
     { name: 'Tableau de bord', href: '/', icon: '🏠' },
     { name: 'Projets', href: '/projets', icon: '📁' },
     { name: 'Équipe', href: '/equipe', icon: '👥' },
-    { name: 'Rapports', href: '/rapports', icon: '📊' },
+    { name: 'Rapports financiers', href: '/rapports', icon: '📊' },
     { name: 'Paramètres', href: '/parametres', icon: '⚙️' },
   ];
 
