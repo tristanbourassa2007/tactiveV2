@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { TrendingUp, TrendingDown, DollarSign, PieChart, BarChart3, Download, Filter, Calendar, Eye, Clock } from 'lucide-react';
+import { TrendingUp, TrendingDown, DollarSign, PieChart, BarChart3, Download, Filter, Calendar, Eye, Clock, ChevronDown } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -16,7 +16,8 @@ interface FinancialData {
   status: 'completed' | 'pending' | 'cancelled';
 }
 
-const mockFinancialData: FinancialData[] = [
+// Données pour BZ inc.
+const bzIncData: FinancialData[] = [
   {
     id: 1,
     category: "Développement Produit",
@@ -43,57 +44,102 @@ const mockFinancialData: FinancialData[] = [
     date: "2024-01-25",
     description: "Campagne publicitaire Q1",
     status: "completed"
-  },
+  }
+];
+
+// Données pour BZ Telecom inc.
+const bzTelecomData: FinancialData[] = [
   {
-    id: 4,
-    category: "Consultations",
-    amount: 95000,
-    type: "revenue",
-    date: "2024-02-01",
-    description: "Services de consultation",
-    status: "pending"
-  },
-  {
-    id: 5,
-    category: "Infrastructure",
-    amount: 75000,
+    id: 1,
+    category: "Infrastructure Réseau",
+    amount: 200000,
     type: "expense",
-    date: "2024-02-05",
-    description: "Serveurs et cloud computing",
+    date: "2024-01-10",
+    description: "Équipements télécommunications",
     status: "completed"
   },
   {
-    id: 6,
-    category: "Formations",
-    amount: 35000,
+    id: 2,
+    category: "Services Télécom",
+    amount: 450000,
+    type: "revenue",
+    date: "2024-01-15",
+    description: "Revenus services clients",
+    status: "completed"
+  },
+  {
+    id: 3,
+    category: "Maintenance",
+    amount: 75000,
     type: "expense",
-    date: "2024-02-10",
-    description: "Formation équipe technique",
-    status: "pending"
+    date: "2024-01-20",
+    description: "Maintenance réseau mensuelle",
+    status: "completed"
   }
+];
+
+// Données pour Gestion KiloOctets inc.
+const kiloOctetsData: FinancialData[] = [
+  {
+    id: 1,
+    category: "Serveurs Cloud",
+    amount: 180000,
+    type: "expense",
+    date: "2024-01-05",
+    description: "Infrastructure cloud computing",
+    status: "completed"
+  },
+  {
+    id: 2,
+    category: "Services IT",
+    amount: 320000,
+    type: "revenue",
+    date: "2024-01-12",
+    description: "Consultations IT entreprises",
+    status: "completed"
+  },
+  {
+    id: 3,
+    category: "Licences Logicielles",
+    amount: 95000,
+    type: "expense",
+    date: "2024-01-18",
+    description: "Licences développement",
+    status: "completed"
+  }
+];
+
+const companies = [
+  { id: 'bz-inc', name: 'BZ inc.', data: bzIncData },
+  { id: 'bz-telecom', name: 'BZ Telecom inc.', data: bzTelecomData },
+  { id: 'kilooctets', name: 'Gestion KiloOctets inc.', data: kiloOctetsData }
 ];
 
 export default function RapportsFinanciersPage() {
   const [filterType, setFilterType] = useState<'all' | 'revenue' | 'expense'>('all');
   const [selectedPeriod, setSelectedPeriod] = useState('month');
+  const [selectedCompany, setSelectedCompany] = useState('kilooctets');
+  const [selectedReportsCompany, setSelectedReportsCompany] = useState('kilooctets');
 
-  const filteredData = mockFinancialData.filter(item => 
+  const currentCompanyData = companies.find(c => c.id === selectedCompany)?.data || kiloOctetsData;
+  
+  const filteredData = currentCompanyData.filter(item => 
     filterType === 'all' || item.type === filterType
   );
 
   // Calculs des statistiques
-  const totalRevenue = mockFinancialData
+  const totalRevenue = currentCompanyData
     .filter(item => item.type === 'revenue' && item.status === 'completed')
     .reduce((sum, item) => sum + item.amount, 0);
 
-  const totalExpenses = mockFinancialData
+  const totalExpenses = currentCompanyData
     .filter(item => item.type === 'expense' && item.status === 'completed')
     .reduce((sum, item) => sum + item.amount, 0);
 
   const netProfit = totalRevenue - totalExpenses;
   const profitMargin = totalRevenue > 0 ? (netProfit / totalRevenue) * 100 : 0;
 
-  const pendingRevenue = mockFinancialData
+  const pendingRevenue = currentCompanyData
     .filter(item => item.type === 'revenue' && item.status === 'pending')
     .reduce((sum, item) => sum + item.amount, 0);
 
@@ -369,7 +415,23 @@ export default function RapportsFinanciersPage() {
           {/* Section Rapports financiers */}
           <Card>
             <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-t-lg">
-              <CardTitle className="text-xl font-bold">Rapports financiers</CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-xl font-bold">Rapports financiers</CardTitle>
+                <div className="relative">
+                  <select
+                    value={selectedReportsCompany}
+                    onChange={(e) => setSelectedReportsCompany(e.target.value)}
+                    className="appearance-none bg-white/10 text-white border border-white/20 rounded px-4 py-2 pr-8 focus:outline-none focus:bg-white/20 cursor-pointer"
+                  >
+                    {companies.map((company) => (
+                      <option key={company.id} value={company.id} className="text-gray-900">
+                        {company.name}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white pointer-events-none" />
+                </div>
+              </div>
             </CardHeader>
             <CardContent className="p-0">
               <div className="grid grid-cols-1 md:grid-cols-2">
@@ -427,7 +489,23 @@ export default function RapportsFinanciersPage() {
           {/* Section Configuration */}
           <Card>
             <CardHeader className="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-t-lg">
-              <CardTitle className="text-xl font-bold">Configuration</CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-xl font-bold">Configuration</CardTitle>
+                <div className="relative">
+                  <select
+                    value={selectedCompany}
+                    onChange={(e) => setSelectedCompany(e.target.value)}
+                    className="appearance-none bg-white/10 text-white border border-white/20 rounded px-4 py-2 pr-8 focus:outline-none focus:bg-white/20 cursor-pointer"
+                  >
+                    {companies.map((company) => (
+                      <option key={company.id} value={company.id} className="text-gray-900">
+                        {company.name}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white pointer-events-none" />
+                </div>
+              </div>
             </CardHeader>
             <CardContent className="p-0">
               <div className="grid grid-cols-1 md:grid-cols-2">
