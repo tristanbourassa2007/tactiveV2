@@ -1,11 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, Search, Filter, MoreVertical, Calendar, Users, Target, TrendingUp } from 'lucide-react';
+import { Plus, Search, Filter, MoreVertical, Calendar, Users, Target, TrendingUp, X } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Label } from '@/components/ui/label';
 
 interface Plan {
   id: number;
@@ -93,8 +94,22 @@ export default function PlansPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [plans, setPlans] = useState(mockPlans);
+  
+  // États pour le formulaire de nouveau plan
+  const [newPlan, setNewPlan] = useState({
+    title: '',
+    description: '',
+    status: 'planning' as const,
+    priority: 'medium' as const,
+    startDate: '',
+    endDate: '',
+    budget: '',
+    category: ''
+  });
 
-  const filteredPlans = mockPlans.filter(plan => {
+  const filteredPlans = plans.filter(plan => {
     const matchesSearch = plan.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          plan.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = filterStatus === 'all' || plan.status === filterStatus;
@@ -102,10 +117,54 @@ export default function PlansPage() {
   });
 
   const stats = {
-    total: mockPlans.length,
-    active: mockPlans.filter(p => p.status === 'active').length,
-    completed: mockPlans.filter(p => p.status === 'completed').length,
-    totalBudget: mockPlans.reduce((sum, p) => sum + p.budget, 0)
+    total: plans.length,
+    active: plans.filter(p => p.status === 'active').length,
+    completed: plans.filter(p => p.status === 'completed').length,
+    totalBudget: plans.reduce((sum, p) => sum + p.budget, 0)
+  };
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    // Reset form
+    setNewPlan({
+      title: '',
+      description: '',
+      status: 'planning',
+      priority: 'medium',
+      startDate: '',
+      endDate: '',
+      budget: '',
+      category: ''
+    });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Créer le nouveau plan
+    const plan: Plan = {
+      id: Math.max(...plans.map(p => p.id)) + 1,
+      title: newPlan.title,
+      description: newPlan.description,
+      status: newPlan.status,
+      priority: newPlan.priority,
+      startDate: newPlan.startDate,
+      endDate: newPlan.endDate,
+      team: [], // Équipe vide par défaut
+      progress: 0, // Progression à 0 par défaut
+      budget: parseFloat(newPlan.budget) || 0,
+      category: newPlan.category
+    };
+
+    // Ajouter le plan à la liste
+    setPlans([...plans, plan]);
+    
+    // Fermer la modal
+    handleCloseModal();
   };
 
   return (
@@ -197,7 +256,7 @@ export default function PlansPage() {
               <option value="paused">En pause</option>
             </select>
             
-            <Button>
+            <Button onClick={handleOpenModal}>
               <Plus className="h-4 w-4 mr-2" />
               Nouveau Plan
             </Button>
@@ -283,6 +342,180 @@ export default function PlansPage() {
             <Target className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">Aucun plan trouvé</h3>
             <p className="text-gray-600">Essayez de modifier vos critères de recherche</p>
+          </div>
+        )}
+
+        {/* Modal Nouveau Plan */}
+        {isModalOpen && (
+          <div className="fixed inset-0 z-50 overflow-y-auto">
+            <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+              {/* Backdrop */}
+              <div 
+                className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
+                onClick={handleCloseModal}
+              ></div>
+
+              {/* Modal */}
+              <div className="inline-block w-full max-w-2xl px-6 py-8 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-lg">
+                {/* Header */}
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-2xl font-bold text-gray-900">Créer un nouveau plan</h3>
+                  <button
+                    onClick={handleCloseModal}
+                    className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
+
+                {/* Formulaire */}
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Titre */}
+                    <div className="md:col-span-2">
+                      <Label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+                        Titre du plan *
+                      </Label>
+                      <Input
+                        id="title"
+                        type="text"
+                        required
+                        value={newPlan.title}
+                        onChange={(e) => setNewPlan({...newPlan, title: e.target.value})}
+                        placeholder="Ex: Plan de développement Q1"
+                        className="w-full"
+                      />
+                    </div>
+
+                    {/* Description */}
+                    <div className="md:col-span-2">
+                      <Label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+                        Description
+                      </Label>
+                      <textarea
+                        id="description"
+                        rows={3}
+                        value={newPlan.description}
+                        onChange={(e) => setNewPlan({...newPlan, description: e.target.value})}
+                        placeholder="Décrivez brièvement les objectifs de ce plan..."
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                      />
+                    </div>
+
+                    {/* Statut */}
+                    <div>
+                      <Label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-2">
+                        Statut
+                      </Label>
+                      <select
+                        id="status"
+                        value={newPlan.status}
+                        onChange={(e) => setNewPlan({...newPlan, status: e.target.value as any})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      >
+                        <option value="planning">Planification</option>
+                        <option value="active">Actif</option>
+                        <option value="paused">En pause</option>
+                        <option value="completed">Complété</option>
+                      </select>
+                    </div>
+
+                    {/* Priorité */}
+                    <div>
+                      <Label htmlFor="priority" className="block text-sm font-medium text-gray-700 mb-2">
+                        Priorité
+                      </Label>
+                      <select
+                        id="priority"
+                        value={newPlan.priority}
+                        onChange={(e) => setNewPlan({...newPlan, priority: e.target.value as any})}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      >
+                        <option value="low">Basse</option>
+                        <option value="medium">Moyenne</option>
+                        <option value="high">Haute</option>
+                      </select>
+                    </div>
+
+                    {/* Date début */}
+                    <div>
+                      <Label htmlFor="startDate" className="block text-sm font-medium text-gray-700 mb-2">
+                        Date de début *
+                      </Label>
+                      <Input
+                        id="startDate"
+                        type="date"
+                        required
+                        value={newPlan.startDate}
+                        onChange={(e) => setNewPlan({...newPlan, startDate: e.target.value})}
+                        className="w-full"
+                      />
+                    </div>
+
+                    {/* Date fin */}
+                    <div>
+                      <Label htmlFor="endDate" className="block text-sm font-medium text-gray-700 mb-2">
+                        Date de fin *
+                      </Label>
+                      <Input
+                        id="endDate"
+                        type="date"
+                        required
+                        value={newPlan.endDate}
+                        onChange={(e) => setNewPlan({...newPlan, endDate: e.target.value})}
+                        className="w-full"
+                      />
+                    </div>
+
+                    {/* Budget */}
+                    <div>
+                      <Label htmlFor="budget" className="block text-sm font-medium text-gray-700 mb-2">
+                        Budget (CAD)
+                      </Label>
+                      <Input
+                        id="budget"
+                        type="number"
+                        min="0"
+                        step="100"
+                        value={newPlan.budget}
+                        onChange={(e) => setNewPlan({...newPlan, budget: e.target.value})}
+                        placeholder="Ex: 50000"
+                        className="w-full"
+                      />
+                    </div>
+
+                    {/* Catégorie */}
+                    <div>
+                      <Label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
+                        Catégorie
+                      </Label>
+                      <Input
+                        id="category"
+                        type="text"
+                        value={newPlan.category}
+                        onChange={(e) => setNewPlan({...newPlan, category: e.target.value})}
+                        placeholder="Ex: Développement, Marketing..."
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Boutons */}
+                  <div className="flex justify-end space-x-3 pt-6">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleCloseModal}
+                    >
+                      Annuler
+                    </Button>
+                    <Button type="submit">
+                      Créer le plan
+                    </Button>
+                  </div>
+                </form>
+              </div>
+            </div>
           </div>
         )}
       </div>
