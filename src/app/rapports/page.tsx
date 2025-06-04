@@ -363,6 +363,83 @@ export default function RapportsFinanciersPage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Sections Rapports et Configuration */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
+          {/* Section Rapports financiers */}
+          <Card>
+            <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-t-lg">
+              <CardTitle className="text-xl font-bold">Rapports financiers</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <div className="space-y-0">
+                {[
+                  { name: "Aperçu de l'entreprise", favorite: false },
+                  { name: "États des résultats par mois comparatifs détaillés", favorite: true },
+                  { name: "États des résultats", favorite: false },
+                  { name: "Rapport des ventes par secteur d'affaires", favorite: true },
+                  { name: "États des résultats par secteur d'affaire avec profits et pertes", favorite: false },
+                  { name: "États des résultats par mois comparatifs détaillés sous groupes", favorite: true },
+                  { name: "à venir", favorite: false },
+                  { name: "Liste des Amortissements", favorite: true },
+                  { name: "Amortissements Exportation mensuel GL", favorite: true },
+                  { name: "États financiers détaillés mensuel FD", favorite: true },
+                  { name: "États financiers mensuel FD", favorite: true },
+                  { name: "Bilan sommaire", favorite: false },
+                  { name: "% du total des revenus de l'état des résultats", favorite: false },
+                  { name: "à venir", favorite: false }
+                ].map((item, index) => (
+                  <div key={index} className="flex items-center justify-between p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer">
+                    <span className="text-sm text-gray-700">{item.name}</span>
+                    <div className="flex items-center">
+                      {item.favorite ? (
+                        <span className="text-green-500">★</span>
+                      ) : (
+                        <span className="text-gray-300">☆</span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Section Configuration */}
+          <Card>
+            <CardHeader className="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-t-lg">
+              <CardTitle className="text-xl font-bold">Configuration</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <div className="space-y-0">
+                {[
+                  { name: "Liste des comptes", favorite: true },
+                  { name: "Gestion des compagnies", favorite: true },
+                  { name: "Gestion des types de comptes", favorite: true },
+                  { name: "Importation des inscriptions GL mensuel", favorite: true },
+                  { name: "Gestion des secteurs d'affaire", favorite: true },
+                  { name: "Liste des incriptions du Grand Livre", favorite: false }
+                ].map((item, index) => (
+                  <div key={index} className="flex items-center justify-between p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer">
+                    <span className="text-sm text-gray-700">{item.name}</span>
+                    <div className="flex items-center">
+                      {item.favorite ? (
+                        item.name === "Gestion des types de comptes" ? (
+                          <span className="text-red-500">★</span>
+                        ) : item.name === "Gestion des secteurs d'affaire" ? (
+                          <span className="text-red-500">★</span>
+                        ) : (
+                          <span className="text-blue-500">★</span>
+                        )
+                      ) : (
+                        <span className="text-gray-300">☆</span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
