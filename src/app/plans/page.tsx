@@ -357,21 +357,20 @@ export default function PlansPage() {
 
               {/* Modal */}
               <div className="inline-block w-full max-w-2xl my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-lg">
-                {/* Barre dégradée bleue en haut */}
-                <div className="h-2 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 rounded-t-lg"></div>
-                
-                <div className="px-6 py-8">
-                  {/* Header */}
-                  <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-2xl font-bold text-gray-900">Créer un nouveau plan</h3>
+                {/* Header avec barre dégradée bleue */}
+                <div className="bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 px-6 py-6 rounded-t-lg">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-2xl font-bold text-white">Créer un nouveau plan</h3>
                     <button
                       onClick={handleCloseModal}
-                      className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                      className="p-2 text-white hover:text-gray-200 hover:bg-white/10 rounded-lg transition-colors"
                     >
                       <X className="h-5 w-5" />
                     </button>
                   </div>
-
+                </div>
+                
+                <div className="px-6 py-8">
                   {/* Formulaire */}
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
