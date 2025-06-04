@@ -119,7 +119,6 @@ export default function RapportsFinanciersPage() {
   const [filterType, setFilterType] = useState<'all' | 'revenue' | 'expense'>('all');
   const [selectedPeriod, setSelectedPeriod] = useState('month');
   const [selectedCompany, setSelectedCompany] = useState('kilooctets');
-  const [selectedReportsCompany, setSelectedReportsCompany] = useState('kilooctets');
 
   const currentCompanyData = companies.find(c => c.id === selectedCompany)?.data || kiloOctetsData;
   
@@ -153,7 +152,23 @@ export default function RapportsFinanciersPage() {
               <h1 className="text-3xl font-bold text-gray-900 mb-2">Rapports Financiers</h1>
               <p className="text-gray-600">Vue d'ensemble de la performance financière</p>
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-3 items-center">
+              {/* Sélecteur de compagnie principal */}
+              <div className="relative">
+                <select
+                  value={selectedCompany}
+                  onChange={(e) => setSelectedCompany(e.target.value)}
+                  className="appearance-none bg-gradient-to-r from-indigo-500 to-indigo-600 text-white border-0 rounded-lg px-4 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-300 cursor-pointer font-medium shadow-lg"
+                >
+                  {companies.map((company) => (
+                    <option key={company.id} value={company.id} className="text-gray-900 bg-white">
+                      {company.name}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white pointer-events-none" />
+              </div>
+              
               <Button variant="outline">
                 <Calendar className="h-4 w-4 mr-2" />
                 Période
@@ -415,23 +430,7 @@ export default function RapportsFinanciersPage() {
           {/* Section Rapports financiers */}
           <Card>
             <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-t-lg">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-xl font-bold">Rapports financiers</CardTitle>
-                <div className="relative">
-                  <select
-                    value={selectedReportsCompany}
-                    onChange={(e) => setSelectedReportsCompany(e.target.value)}
-                    className="appearance-none bg-white/10 text-white border border-white/20 rounded px-4 py-2 pr-8 focus:outline-none focus:bg-white/20 cursor-pointer"
-                  >
-                    {companies.map((company) => (
-                      <option key={company.id} value={company.id} className="text-gray-900">
-                        {company.name}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white pointer-events-none" />
-                </div>
-              </div>
+              <CardTitle className="text-xl font-bold">Rapports financiers</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <div className="grid grid-cols-1 md:grid-cols-2">
@@ -489,23 +488,7 @@ export default function RapportsFinanciersPage() {
           {/* Section Configuration */}
           <Card>
             <CardHeader className="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-t-lg">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-xl font-bold">Configuration</CardTitle>
-                <div className="relative">
-                  <select
-                    value={selectedCompany}
-                    onChange={(e) => setSelectedCompany(e.target.value)}
-                    className="appearance-none bg-white/10 text-white border border-white/20 rounded px-4 py-2 pr-8 focus:outline-none focus:bg-white/20 cursor-pointer"
-                  >
-                    {companies.map((company) => (
-                      <option key={company.id} value={company.id} className="text-gray-900">
-                        {company.name}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white pointer-events-none" />
-                </div>
-              </div>
+              <CardTitle className="text-xl font-bold">Configuration</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <div className="grid grid-cols-1 md:grid-cols-2">
