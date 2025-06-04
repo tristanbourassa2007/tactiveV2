@@ -365,41 +365,61 @@ export default function RapportsFinanciersPage() {
         </Card>
 
         {/* Sections Rapports et Configuration */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
+        <div className="space-y-8 mt-12">
           {/* Section Rapports financiers */}
           <Card>
             <CardHeader className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-t-lg">
               <CardTitle className="text-xl font-bold">Rapports financiers</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
-              <div className="space-y-0">
-                {[
-                  { name: "Aperçu de l'entreprise", favorite: false },
-                  { name: "États des résultats par mois comparatifs détaillés", favorite: true },
-                  { name: "États des résultats", favorite: false },
-                  { name: "Rapport des ventes par secteur d'affaires", favorite: true },
-                  { name: "États des résultats par secteur d'affaire avec profits et pertes", favorite: false },
-                  { name: "États des résultats par mois comparatifs détaillés sous groupes", favorite: true },
-                  { name: "à venir", favorite: false },
-                  { name: "Liste des Amortissements", favorite: true },
-                  { name: "Amortissements Exportation mensuel GL", favorite: true },
-                  { name: "États financiers détaillés mensuel FD", favorite: true },
-                  { name: "États financiers mensuel FD", favorite: true },
-                  { name: "Bilan sommaire", favorite: false },
-                  { name: "% du total des revenus de l'état des résultats", favorite: false },
-                  { name: "à venir", favorite: false }
-                ].map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer">
-                    <span className="text-sm text-gray-700">{item.name}</span>
-                    <div className="flex items-center">
-                      {item.favorite ? (
-                        <span className="text-green-500">★</span>
-                      ) : (
-                        <span className="text-gray-300">☆</span>
-                      )}
+              <div className="grid grid-cols-1 md:grid-cols-2">
+                {/* Colonne de gauche */}
+                <div className="space-y-0">
+                  {[
+                    { name: "Aperçu de l'entreprise", favorite: false },
+                    { name: "États des résultats par mois comparatifs détaillés", favorite: true },
+                    { name: "États des résultats", favorite: false },
+                    { name: "Rapport des ventes par secteur d'affaires", favorite: true },
+                    { name: "États des résultats par secteur d'affaire avec profits et pertes", favorite: false },
+                    { name: "États des résultats par mois comparatifs détaillés sous groupes", favorite: true },
+                    { name: "à venir", favorite: false }
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-center justify-between p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer">
+                      <span className="text-sm text-gray-700">{item.name}</span>
+                      <div className="flex items-center">
+                        {item.favorite ? (
+                          <span className="text-green-500">★</span>
+                        ) : (
+                          <span className="text-gray-300">☆</span>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+
+                {/* Colonne de droite */}
+                <div className="space-y-0">
+                  {[
+                    { name: "Liste des Amortissements", favorite: true },
+                    { name: "Amortissements Exportation mensuel GL", favorite: true },
+                    { name: "États financiers détaillés mensuel FD", favorite: true },
+                    { name: "États financiers mensuel FD", favorite: true },
+                    { name: "Bilan sommaire", favorite: false },
+                    { name: "% du total des revenus de l'état des résultats", favorite: false },
+                    { name: "à venir", favorite: false }
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-center justify-between p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer">
+                      <span className="text-sm text-gray-700">{item.name}</span>
+                      <div className="flex items-center">
+                        {item.favorite ? (
+                          <span className="text-green-500">★</span>
+                        ) : (
+                          <span className="text-gray-300">☆</span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </CardContent>
           </Card>
