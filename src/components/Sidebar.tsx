@@ -8,7 +8,7 @@ export default function Sidebar() {
 
   const menuItems = [
     { name: 'Tableau de bord', href: '/', icon: '🏠' },
-    { name: 'Projets', href: '/projets', icon: '📁' },
+    { name: 'Plans', href: '/plans', icon: '📁' },
     { name: 'Équipe', href: '/equipe', icon: '👥' },
     { name: 'Rapports financiers', href: '/rapports', icon: '📊' },
     { name: 'Paramètres', href: '/parametres', icon: '⚙️' },
