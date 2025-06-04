@@ -410,32 +410,64 @@ export default function RapportsFinanciersPage() {
               <CardTitle className="text-xl font-bold">Configuration</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
-              <div className="space-y-0">
-                {[
-                  { name: "Liste des comptes", favorite: true },
-                  { name: "Gestion des compagnies", favorite: true },
-                  { name: "Gestion des types de comptes", favorite: true },
-                  { name: "Importation des inscriptions GL mensuel", favorite: true },
-                  { name: "Gestion des secteurs d'affaire", favorite: true },
-                  { name: "Liste des incriptions du Grand Livre", favorite: false }
-                ].map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer">
-                    <span className="text-sm text-gray-700">{item.name}</span>
-                    <div className="flex items-center">
-                      {item.favorite ? (
-                        item.name === "Gestion des types de comptes" ? (
-                          <span className="text-red-500">★</span>
-                        ) : item.name === "Gestion des secteurs d'affaire" ? (
-                          <span className="text-red-500">★</span>
+              <div className="grid grid-cols-1 md:grid-cols-2">
+                {/* Colonne de gauche */}
+                <div className="space-y-0">
+                  {[
+                    { name: "Liste des comptes", favorite: true, color: "blue" },
+                    { name: "Gestion des compagnies", favorite: true, color: "blue" },
+                    { name: "Gestion des types de comptes", favorite: true, color: "red" },
+                    { name: "Gestion des sous-types de compte", favorite: true, color: "blue" },
+                    { name: "Gestion des groupes des états financiers", favorite: true, color: "blue" },
+                    { name: "Gestion des budgets annuels", favorite: true, color: "blue" },
+                    { name: "Gestion des départements", favorite: true, color: "blue" }
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-center justify-between p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer">
+                      <span className="text-sm text-gray-700">{item.name}</span>
+                      <div className="flex items-center">
+                        {item.favorite ? (
+                          <span className={`${
+                            item.color === "red" ? "text-red-500" :
+                            item.color === "blue" ? "text-blue-500" :
+                            item.color === "green" ? "text-green-500" :
+                            "text-gray-300"
+                          }`}>★</span>
                         ) : (
-                          <span className="text-blue-500">★</span>
-                        )
-                      ) : (
-                        <span className="text-gray-300">☆</span>
-                      )}
+                          <span className="text-gray-300">☆</span>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+
+                {/* Colonne de droite */}
+                <div className="space-y-0">
+                  {[
+                    { name: "Importation des inscriptions GL mensuel", favorite: true, color: "green" },
+                    { name: "Gestion des secteurs d'affaire", favorite: true, color: "red" },
+                    { name: "Liste des incriptions du Grand Livre", favorite: false, color: "gray" },
+                    { name: "Liste des Notes des GL", favorite: true, color: "blue" },
+                    { name: "États financiers des comptables annuels PDF", favorite: true, color: "red" },
+                    { name: "Email fin de mois GPT4o-mini AI", favorite: true, color: "green" },
+                    { name: "Gestion des sous-groupes de compte", favorite: true, color: "blue" }
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-center justify-between p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer">
+                      <span className="text-sm text-gray-700">{item.name}</span>
+                      <div className="flex items-center">
+                        {item.favorite ? (
+                          <span className={`${
+                            item.color === "red" ? "text-red-500" :
+                            item.color === "blue" ? "text-blue-500" :
+                            item.color === "green" ? "text-green-500" :
+                            "text-gray-300"
+                          }`}>★</span>
+                        ) : (
+                          <span className="text-gray-300">☆</span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </CardContent>
           </Card>
